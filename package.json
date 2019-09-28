@@ -22,6 +22,7 @@
     "@nestjs/common": "^6.7.2",
     "@nestjs/core": "^6.7.2",
     "@nestjs/platform-express": "^6.7.2",
+    "@nestjs/swagger": "^3.1.0",
     "@nestjs/typeorm": "^6.2.0",
     "@nestjsx/crud": "^4.2.0",
     "@nestjsx/crud-typeorm": "^4.2.0",
@@ -34,6 +35,7 @@
     "rucaptcha": "^1.0.5",
     "rxjs": "^6.5.3",
     "selenium-webdriver": "^4.0.0-alpha.5",
+    "swagger-ui-express": "^4.1.1",
     "typeorm": "^0.2.19"
   },
   "devDependencies": {
