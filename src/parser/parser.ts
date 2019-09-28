@@ -1,15 +1,20 @@
 import { Builder, By, Key, until } from 'selenium-webdriver';
 import * as chrome from 'selenium-webdriver/chrome';
-import { CAPTCHA_INPUT_SELECTOR, CAPTCHA_SELECTOR, ROOT_SELECTOR} from './constants';
+// import { createConnection } from 'typeorm';
+// import {databaseProviders} from '../database.providers';
+import { databaseProviders } from '../database.providers';
+import 'reflect-metadata';
+import { Review } from './review.entity';
+
 import { solverCaptcha } from './solverCaptcha';
 import { getComments } from './getComments';
 import { log, makeList } from './helpers';
-import { Review } from '../Review/review.entity';
-import 'reflect-metadata';
-import {databaseProviders} from '../database.providers';
-import { HEADLESS, maxPage, URL } from '../config';
+import { HEADLESS, maxPage, URL, DB_CONFIG } from '../config';
+import { CAPTCHA_INPUT_SELECTOR, CAPTCHA_SELECTOR, ROOT_SELECTOR} from './constants';
 
 (async function parser() {
+  const db = await databaseProviders[0].useFactory();
+
   const screen = {
     width: 640,
     height: 480,
@@ -25,16 +30,23 @@ import { HEADLESS, maxPage, URL } from '../config';
       .build();
   }
 
-  // const store = new Storage();
   const urls = makeList(maxPage).map(page => {
     return page === 0 ? URL : URL + '?page=' + page;
   });
+  const getUrl = get(driver);
 
   try {
-    const getUrl = get(driver);
     // @ts-ignore
-    const db = await databaseProviders[0].useFactory();
-    // const db = await createConnection();
+    // const db = await createConnection({
+    //   "type": "mysql",
+    //   "host": "localhost",
+    //   "port": 3306,
+    //   "username": "root",
+    //   "password": "root",
+    //   "database": "test_db",
+    //   "entities": ["src/**/*.entity{.ts,.js}"],
+    //   "synchronize": true
+    // });
     for (const url of urls) {
       log('parse url', url);
       const status = await getUrl(url);
@@ -62,19 +74,19 @@ import { HEADLESS, maxPage, URL } from '../config';
         review.date = comment.date;
         review.city = comment.city;
 
-        const res = await repo.save(review);
+        await repo.save(review);
       }
     }
-  } catch (err) {
-
-    log('error in parser.ts:', err);
+  // } catch (err) {
+  //
+  //   log('error in parser.ts:', err);
   } finally {
     await driver.quit();
   }
 })();
 
 function get(driver) {
-  let errorcount = 0;
+  let errorCount = 0;
   return async (url) => {
     await driver.get(url);
     const title = await driver.getTitle();
@@ -93,10 +105,10 @@ function get(driver) {
       ), 20000);
       return true;
     } catch (e) {
-      if (errorcount > 5) {
+      if (errorCount > 5) {
         throw Error(e);
       }
-      errorcount++;
+      errorCount++;
       return null;
     }
   };

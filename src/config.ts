@@ -11,12 +11,8 @@ export const DB_CONFIG = {
   username: 'root',
   password: 'root',
   database: 'test_db',
-  charset: 'utf8mb4_unicode_ci',
   // extra: {
   //   charset: 'utf8mb4',
   // },
-  // entities: [
-  //   __dirname + '/../**/*.entity{.ts,.js}',
-  // ],
   synchronize: true,
 };

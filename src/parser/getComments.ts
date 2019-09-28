@@ -14,13 +14,13 @@ export function getComments(html) {
   const cards = HtmlDoc.querySelectorAll(COMMENT_SELECTOR);
   return cards.map(card => {
     // @ts-ignore
-    const userEl = card.querySelector(USER_SELECTOR)
+    const userEl = card.querySelector(USER_SELECTOR);
       const user = userEl ? userEl.rawText : 'Неизвестный';
     // @ts-ignore
     const ratingEl = card.querySelector(RATING_SELECTOR);
     const rating = ratingEl ? ratingEl.attributes['data-rate'] : 0;
     // @ts-ignore
-    const labelEl = card.querySelector(LABEL_SELECTOR)
+    const labelEl = card.querySelector(LABEL_SELECTOR);
       const label = labelEl ? labelEl.rawText : '';
     // @ts-ignore
     const bodyHtml = card.querySelectorAll(BODY_OF_COMMENT_SELECTOR);

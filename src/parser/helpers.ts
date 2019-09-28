@@ -15,6 +15,3 @@ export function log(msg = '', value: any) {
   }
 }
 
-export function convertDateToTimestamp(date) {
-  return
-}
